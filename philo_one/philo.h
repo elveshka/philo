@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:24:37 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/01 21:14:01 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/01 22:10:22 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,6 @@ void				eating(int i);
 void				sleeping(int i);
 void				thinking(int i);
 void				grabbing_forks(int i);
+unsigned long		get_time(void);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/01 21:57:12 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/01 22:25:07 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,9 @@ int					main(int ac, char **av)
 {
 	t_phi_data		philos;
 	int				i;
-	struct timeval	time;
+	unsigned long	t;
 
-	gettimeofday(&time, NULL);
+	t = get_time();
 	if (ac < 5 || ac > 6)
 		return (puterr());
 	if (philo_config(ac, av, &philos))
@@ -99,7 +99,7 @@ int					main(int ac, char **av)
 	while (++i < philos.num)
 		pthread_create(&philos.phil[i], NULL, sobaka, (void*)&philos.p[i]);
 	getchar();
-	printf("\n%zd\n%d\n", time.tv_sec, time.tv_usec);
+	printf("\n%lu\n", get_time() - t);
 	i = -1;
 	while (++i < philos.num)
 		pthread_mutex_destroy(forks[i]);
