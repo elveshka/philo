@@ -1,49 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   notlibft.c                                         :+:      :+:    :+:   */
+/*   activity.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/29 14:34:11 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/01 21:13:57 by esnowbal         ###   ########.fr       */
+/*   Created: 2021/01/30 18:06:18 by esnowbal          #+#    #+#             */
+/*   Updated: 2021/02/01 17:38:11 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int			not_strlen(char *s)
+void	eating(int i)
 {
-	int r;
-
-	r = 0;
-	while (s[r++])
-		;
-	return (r);
+	printf("%d is eating\n", i + 1);
 }
 
-int			not_isdigit(int c)
+void	sleeping(int i)
 {
-	if (c >= 48 && c <= 57)
-		return (c);
-	return (0);
+	printf("%d is sleeping\n", i + 1);
 }
 
-int			not_atoi(const char *str)
+void	thinking(int i)
 {
-	int res;
-
-	res = 0;
-	while (*str >= 48 && *str <= 57)
-	{
-		res = res * 10 + *str - 48;
-		str++;
-	}
-	return (res);
+	printf("%d is thinking\n", i + 1);
 }
 
-int			puterr(void)
+void	grabbing_forks(int i)
 {
-	printf("Invalid argument\n");
-	return (1);
+	printf("%d has taken a fork\n", i + 1);
 }

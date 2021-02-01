@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/esnowbal/projects/philo_gh/philo_one/activity.c
+philo.h
+/Users/esnowbal/projects/philo_gh/philo_one/philo.h
+
+/Users/esnowbal/projects/philo_gh/philo_one/main.c
+philo.h
+/Users/esnowbal/projects/philo_gh/philo_one/philo.h
+
+/Users/esnowbal/projects/philo_gh/philo_one/notlibft.c
+philo.h
+/Users/esnowbal/projects/philo_gh/philo_one/philo.h
+
+/Users/esnowbal/projects/philo_gh/philo_one/philo.h
+stdlib.h
+-
+stdio.h
+-
+pthread.h
+-
+unistd.h
+-
+
