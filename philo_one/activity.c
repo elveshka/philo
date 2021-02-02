@@ -6,31 +6,31 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 18:06:18 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/02 20:23:28 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/02 20:37:02 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void			eating(int i)
+void			eating(t_phil *phil)
 {
-	printf("%d is eating\n", i + 1);
+	printf("%lu %d is eating\n", get_time() - phil->living_time, phil->index + 1);
 	usleep(200000);
 }
 
-void			sleeping(int i)
+void			sleeping(t_phil *phil)
 {
-	printf("%d is sleeping\n", i + 1);
+	printf("%lu %d is sleeping\n", get_time() - phil->living_time, phil->index + 1);
 }
 
-void			thinking(int i)
+void			thinking(t_phil *phil)
 {
-	printf("%d is thinking\n", i + 1);
+	printf("%lu %d is thinking\n", get_time() - phil->living_time, phil->index + 1);
 }
 
-void			grabbing_forks(int i)
+void			grabbing_forks(t_phil *phil)
 {
-	printf("%d has taken a fork\n", i + 1);
+	printf("%lu %d has taken a fork\n", get_time() - phil->living_time, phil->index + 1);
 }
 
 unsigned long	get_time(void)

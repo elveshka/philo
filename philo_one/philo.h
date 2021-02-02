@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:24:37 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/02 20:06:32 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/02 20:35:45 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ int					not_atoi(const char *str);
 int					not_isdigit(int c);
 int					puterr(void);
 int					not_strlen(char *s);
-void				eating(int i);
-void				sleeping(int i);
-void				thinking(int i);
-void				grabbing_forks(int i);
+void				eating(t_phil *phil);
+void				sleeping(t_phil *phil);
+void				thinking(t_phil *phil);
+void				grabbing_forks(t_phil *phil);
 unsigned long		get_time(void);
 t_phil				*philos_init(t_data *data, pthread_mutex_t **forks);
 int					philo_config(int ac, char **av, t_data *data);

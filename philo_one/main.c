@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/02 20:22:32 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/02 20:46:49 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ void				*sobaka(void *phil)
 {
 	pthread_mutex_lock(((t_phil *)phil)->left);
 	pthread_mutex_lock(((t_phil *)phil)->right);
-	grabbing_forks(((t_phil *)phil)->index);
-	eating(((t_phil *)phil)->index);
-	sleeping(((t_phil *)phil)->index);
-	thinking(((t_phil *)phil)->index);
-	write(1, "\n", 1);
+	grabbing_forks((t_phil *)phil);
+	eating((t_phil *)phil);
+	sleeping((t_phil *)phil);
+	thinking((t_phil *)phil);
+	printf("%d\n", ((t_phil *)phil)->index + 1);
 	pthread_mutex_unlock(((t_phil *)phil)->right);
 	pthread_mutex_unlock(((t_phil *)phil)->left);
 	return (NULL);
@@ -44,7 +44,10 @@ int					main(int ac, char **av)
 	philos = philos_init(&data, forks);
 	i = -1;
 	while (++i < data.num)
+	{
 		pthread_create(&data.threads[i], NULL, sobaka, (void*)&philos[i]);
+		usleep(10);
+	}
 	getchar();
 	i = -1;
 	while (++i < data.num)
