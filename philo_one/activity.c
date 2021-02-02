@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 18:06:18 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/01 22:16:21 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/02 20:23:28 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void			eating(int i)
 {
 	printf("%d is eating\n", i + 1);
+	usleep(200000);
 }
 
 void			sleeping(int i)

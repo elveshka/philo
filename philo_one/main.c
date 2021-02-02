@@ -6,108 +6,57 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/01 22:25:07 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/02 20:22:32 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-pthread_mutex_t		**forks;
-
-pthread_mutex_t		**create_mutex(int num)
+void				*sobaka(void *phil)
 {
-	int				i;
-	pthread_mutex_t	**ret;
-
-	i = -1;
-	ret = (pthread_mutex_t **)malloc(sizeof(pthread_mutex_t *) * (num + 1));
-	while (++i < num)
-		ret[i] = malloc(sizeof(pthread_mutex_t));
-	ret[i] = 0;
-	i = -1;
-	while (++i < num)
-		pthread_mutex_init(ret[i], NULL);
-	return (ret);
-}
-
-void				*sobaka(void *ar)
-{
-	int		right_hand;
-	int		left_hand;
-
-	left_hand = *(int*)ar;
-	right_hand = *(int*)ar + 1;
-	if (!forks[right_hand])
-		right_hand = 0;
-	pthread_mutex_lock(forks[right_hand]);
-	pthread_mutex_lock(forks[left_hand]);
-	grabbing_forks(left_hand);
-	eating(left_hand);
-	sleeping(left_hand);
-	thinking(left_hand);
+	pthread_mutex_lock(((t_phil *)phil)->left);
+	pthread_mutex_lock(((t_phil *)phil)->right);
+	grabbing_forks(((t_phil *)phil)->index);
+	eating(((t_phil *)phil)->index);
+	sleeping(((t_phil *)phil)->index);
+	thinking(((t_phil *)phil)->index);
 	write(1, "\n", 1);
-	pthread_mutex_unlock(forks[right_hand]);
-	pthread_mutex_unlock(forks[left_hand]);
+	pthread_mutex_unlock(((t_phil *)phil)->right);
+	pthread_mutex_unlock(((t_phil *)phil)->left);
 	return (NULL);
-}
-
-static int			philo_config(int ac, char **av, t_phi_data *philos)
-{
-	int i;
-	int j;
-
-	i = 1;
-	while (av[i])
-	{
-		j = 0;
-		while (av[i][j])
-		{
-			if (!not_isdigit(av[i][j]))
-				return (puterr());
-			j++;
-		}
-		i++;
-	}
-	philos->num = not_atoi(av[1]);
-	if (philos->num < 2)
-		return (puterr());
-	philos->time_to_die = not_atoi(av[2]);
-	philos->time_to_eat = not_atoi(av[3]);
-	philos->time_to_sleep = not_atoi(av[4]);
-	philos->num_eat = (ac == 6) ? not_atoi(av[5]) : -1;
-	return (0);
 }
 
 int					main(int ac, char **av)
 {
-	t_phi_data		philos;
+	t_data			data;
+	t_phil			*philos;
 	int				i;
-	unsigned long	t;
+	unsigned long	time;
+	pthread_mutex_t	**forks;
 
-	t = get_time();
+	time = get_time();
 	if (ac < 5 || ac > 6)
 		return (puterr());
-	if (philo_config(ac, av, &philos))
+	if (philo_config(ac, av, &data))
 		return (1);
+	forks = create_mutex(data.num);
+	data.threads = malloc(sizeof(pthread_t) * data.num);
+	philos = philos_init(&data, forks);
 	i = -1;
-	forks = create_mutex(philos.num);
-	philos.phil = malloc(sizeof(pthread_t) * philos.num);
-	philos.p = malloc(sizeof(int) * philos.num);
-	while (++i < philos.num)
-		philos.p[i] = i;
-	i = -1;
-	while (++i < philos.num)
-		pthread_create(&philos.phil[i], NULL, sobaka, (void*)&philos.p[i]);
+	while (++i < data.num)
+		pthread_create(&data.threads[i], NULL, sobaka, (void*)&philos[i]);
 	getchar();
-	printf("\n%lu\n", get_time() - t);
 	i = -1;
-	while (++i < philos.num)
+	while (++i < data.num)
 		pthread_mutex_destroy(forks[i]);
 	i = -1;
-	while (++i < philos.num)
-		pthread_detach(philos.phil[i]);
+	while (++i < data.num)
+		free(forks[i]);
+	i = -1;
+	while (++i < data.num)
+		pthread_detach(data.threads[i]);
 	free(forks);
-	free(philos.phil);
-	free(philos.p);
+	free(data.threads);
+	free(philos);
 	return (0);
 }

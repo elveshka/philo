@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:24:37 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/01 22:10:22 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/02 20:06:32 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,26 @@
 # include <unistd.h>
 # include <sys/time.h>
 
-typedef struct		s_phi_data
+typedef struct		s_data
 {
 	int				num;
-	int				time_to_die;
 	int				time_to_eat;
+	int				time_to_die;
 	int				time_to_sleep;
 	int				num_eat;
-	int				*p;
-	pthread_t		*phil;
-	pthread_mutex_t	left;
-	pthread_mutex_t	right;
-}					t_phi_data;
+	pthread_t		*threads;
+}					t_data;
+
+typedef struct		s_phil
+{
+	int				index;
+	unsigned long	living_time;
+	int				died;
+	int				meal_times;
+	pthread_mutex_t	*left;
+	pthread_mutex_t	*right;
+	t_data			*data;
+}					t_phil;
 
 int					not_atoi(const char *str);
 int					not_isdigit(int c);
@@ -41,5 +49,8 @@ void				sleeping(int i);
 void				thinking(int i);
 void				grabbing_forks(int i);
 unsigned long		get_time(void);
+t_phil				*philos_init(t_data *data, pthread_mutex_t **forks);
+int					philo_config(int ac, char **av, t_data *data);
+pthread_mutex_t		**create_mutex(int num);
 
 #endif
