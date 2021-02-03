@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:24:37 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/02 20:35:45 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/03 14:11:45 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct		s_phil
 {
 	int				index;
 	unsigned long	living_time;
+	unsigned long	start_time;
 	int				died;
 	int				meal_times;
 	pthread_mutex_t	*left;
