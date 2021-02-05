@@ -13,7 +13,7 @@
 NAME = philo_one
 
 CC = clang
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -pthread -Wall -Werror -Wextra
 LIBS = -lpthread
 
 SRC = philo_one.c other.c other_next.c functions.c init.c sim.c

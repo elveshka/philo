@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:24:37 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/03 14:11:45 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/05 16:11:14 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ typedef struct		s_data
 typedef struct		s_phil
 {
 	int				index;
-	unsigned long	living_time;
-	unsigned long	start_time;
+	int				living_time;
+	int				last_action;
+	int				start_time;
 	int				died;
 	int				meal_times;
 	pthread_mutex_t	*left;
@@ -49,7 +50,7 @@ void				eating(t_phil *phil);
 void				sleeping(t_phil *phil);
 void				thinking(t_phil *phil);
 void				grabbing_forks(t_phil *phil);
-unsigned long		get_time(void);
+int					get_time(void);
 t_phil				*philos_init(t_data *data, pthread_mutex_t **forks);
 int					philo_config(int ac, char **av, t_data *data);
 pthread_mutex_t		**create_mutex(int num);

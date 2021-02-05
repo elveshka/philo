@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/05 13:16:38 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/05 16:31:34 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void				*sobaka(void *phil)
 		pthread_mutex_unlock(((t_phil *)phil)->right);
 		pthread_mutex_unlock(((t_phil *)phil)->left);
 		sleeping((t_phil *)phil);
-		// /thinking((t_phil *)phil);
-		if (get_time() - ((t_phil *)phil)->living_time > \
-		(unsigned long)((t_phil *)phil)->data->time_to_die)
+		thinking((t_phil *)phil);
+		if (((t_phil *)phil)->last_action > \
+		((t_phil *)phil)->data->time_to_die + get_time())
 			((t_phil *)phil)->died++;
 	}
 	return (NULL);
@@ -53,9 +53,9 @@ int					main(int ac, char **av)
 	while (++i < data.num)
 	{
 		pthread_create(&data.threads[i], NULL, sobaka, (void*)&philos[i]);
-		usleep(10);
+		usleep(100);
 	}
-	getchar();
+	// getchar();
 	i = -1;
 	while (++i < data.num)
 		pthread_mutex_destroy(forks[i]);
