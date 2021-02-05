@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 18:06:18 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/02 20:37:02 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/02 23:59:47 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,20 @@
 void			eating(t_phil *phil)
 {
 	printf("%lu %d is eating\n", get_time() - phil->living_time, phil->index + 1);
-	usleep(200000);
+	usleep(phil->data->time_to_eat * 1000);
+	phil->living_time += phil->data->time_to_eat * 1000;
 }
 
 void			sleeping(t_phil *phil)
 {
 	printf("%lu %d is sleeping\n", get_time() - phil->living_time, phil->index + 1);
+	usleep(phil->data->time_to_sleep * 1000);
 }
 
 void			thinking(t_phil *phil)
 {
 	printf("%lu %d is thinking\n", get_time() - phil->living_time, phil->index + 1);
+	// usleep(phil->data->time_to_ * 1000);
 }
 
 void			grabbing_forks(t_phil *phil)

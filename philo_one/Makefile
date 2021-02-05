@@ -19,7 +19,7 @@ HEADERS= philo.h
 all: $(NAME)
 
 $(NAME): $(SRC) $(HEADERS)
-		gcc -Wall -Wextra -Werror $(SRC) -o $(NAME)
+		gcc -Wall -Wextra -Werror -pthread $(SRC) -o $(NAME)
 
 clean:
 		rm -rf $(NAME)

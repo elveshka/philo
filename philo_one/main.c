@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/02 20:46:49 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/02 22:51:54 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int					main(int ac, char **av)
 	pthread_mutex_t	**forks;
 
 	time = get_time();
+	(void)time;
 	if (ac < 5 || ac > 6)
 		return (puterr());
 	if (philo_config(ac, av, &data))
