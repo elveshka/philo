@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/02 22:51:54 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/05 13:16:38 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,21 @@
 
 void				*sobaka(void *phil)
 {
-	pthread_mutex_lock(((t_phil *)phil)->left);
-	pthread_mutex_lock(((t_phil *)phil)->right);
-	grabbing_forks((t_phil *)phil);
-	eating((t_phil *)phil);
-	sleeping((t_phil *)phil);
-	thinking((t_phil *)phil);
-	printf("%d\n", ((t_phil *)phil)->index + 1);
-	pthread_mutex_unlock(((t_phil *)phil)->right);
-	pthread_mutex_unlock(((t_phil *)phil)->left);
+	while (!((t_phil *)phil)->died)
+	{
+		pthread_mutex_lock(((t_phil *)phil)->left);
+		grabbing_forks((t_phil *)phil);
+		pthread_mutex_lock(((t_phil *)phil)->right);
+		grabbing_forks((t_phil *)phil);
+		eating((t_phil *)phil);
+		pthread_mutex_unlock(((t_phil *)phil)->right);
+		pthread_mutex_unlock(((t_phil *)phil)->left);
+		sleeping((t_phil *)phil);
+		// /thinking((t_phil *)phil);
+		if (get_time() - ((t_phil *)phil)->living_time > \
+		(unsigned long)((t_phil *)phil)->data->time_to_die)
+			((t_phil *)phil)->died++;
+	}
 	return (NULL);
 }
 

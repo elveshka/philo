@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 18:51:49 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/02 20:25:44 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/03 14:12:06 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,11 @@ t_phil				*philos_init(t_data *data, pthread_mutex_t **forks)
 	{
 		philos[i].index = i;
 		philos[i].data = data;
-		philos[i].living_time = get_time();
+		philos[i].start_time = get_time();
 		philos[i].died = 0;
 		philos[i].meal_times = 0;
 		philos[i].left = forks[i];
-		if (i == data->num - 1)
-			philos[i].right = forks[0];
-		else
-			philos[i].right = forks[i + 1];
+		philos[i].right = forks[(i + 1) % data->num];
 	}
 	return (philos);
 }
