@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:24:37 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/10 13:51:02 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/10 15:15:58 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct		s_phil
 {
 	int				index;
 	long			living_time;
+	long			start_meal;
 	int				died;
 	int				meal_times;
 	pthread_mutex_t	*left;
@@ -45,9 +46,9 @@ int					not_atoi(const char *str);
 int					not_isdigit(int c);
 int					puterr(void);
 int					not_strlen(char *s);
-void				eating(t_phil *phil);
-void				sleeping(t_phil *phil);
-void				thinking(t_phil *phil);
+int					eating(t_phil *phil);
+int					sleeping(t_phil *phil);
+int					thinking(t_phil *phil);
 void				grabbing_forks(t_phil *phil);
 long				get_time(void);
 t_phil				*philos_init(t_data *data, pthread_mutex_t **forks);

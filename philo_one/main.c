@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/09 17:50:01 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/10 15:54:14 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,22 @@ void				*phillip(void *phil)
 		grabbing_forks((t_phil *)phil);
 		pthread_mutex_lock(((t_phil *)phil)->right);
 		grabbing_forks((t_phil *)phil);
-		eating((t_phil *)phil);
+		if (eating((t_phil *)phil))
+		{
+			((t_phil *)phil)->died++;
+			break ;
+		}
 		pthread_mutex_unlock(((t_phil *)phil)->right);
 		pthread_mutex_unlock(((t_phil *)phil)->left);
-		sleeping((t_phil *)phil);
-		thinking((t_phil *)phil);
-		if (get_time() + ((t_phil *)phil)->data->time_to_die < \
-		((t_phil *)phil)->data->time_to_eat + \
-		((t_phil *)phil)->data->time_to_sleep + \
-		((t_phil *)phil)->living_time)
+		if (sleeping((t_phil *)phil) || thinking((t_phil *)phil))
+		{
 			((t_phil *)phil)->died++;
+			break ;
+		}
 	}
 	printf("%ld %d died\n", \
-	((t_phil *)phil)->living_time, ((t_phil *)phil)->index + 1);
+	((t_phil *)phil)->living_time - ((t_phil *)phil)->data->start_time, \
+	((t_phil *)phil)->index + 1);
 	return (NULL);
 }
 
