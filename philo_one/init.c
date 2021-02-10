@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 18:51:49 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/05 16:11:35 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/10 13:53:26 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,10 @@ t_phil				*philos_init(t_data *data, pthread_mutex_t **forks)
 	{
 		philos[i].index = i;
 		philos[i].data = data;
-		philos[i].start_time = get_time();
 		philos[i].died = 0;
 		philos[i].meal_times = 0;
 		philos[i].left = forks[i];
 		philos[i].right = forks[(i + 1) % data->num];
-		philos[i].last_action = philos[i].start_time;
 	}
 	return (philos);
 }
@@ -57,6 +55,7 @@ int					philo_config(int ac, char **av, t_data *data)
 	data->time_to_eat = not_atoi(av[3]);
 	data->time_to_sleep = not_atoi(av[4]);
 	data->num_eat = (ac == 6) ? not_atoi(av[5]) : -1;
+	data->start_time = get_time();
 	return (0);
 }
 

@@ -6,13 +6,13 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/05 16:31:34 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/09 17:50:01 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void				*sobaka(void *phil)
+void				*phillip(void *phil)
 {
 	while (!((t_phil *)phil)->died)
 	{
@@ -25,10 +25,14 @@ void				*sobaka(void *phil)
 		pthread_mutex_unlock(((t_phil *)phil)->left);
 		sleeping((t_phil *)phil);
 		thinking((t_phil *)phil);
-		if (((t_phil *)phil)->last_action > \
-		((t_phil *)phil)->data->time_to_die + get_time())
+		if (get_time() + ((t_phil *)phil)->data->time_to_die < \
+		((t_phil *)phil)->data->time_to_eat + \
+		((t_phil *)phil)->data->time_to_sleep + \
+		((t_phil *)phil)->living_time)
 			((t_phil *)phil)->died++;
 	}
+	printf("%ld %d died\n", \
+	((t_phil *)phil)->living_time, ((t_phil *)phil)->index + 1);
 	return (NULL);
 }
 
@@ -37,10 +41,8 @@ int					main(int ac, char **av)
 	t_data			data;
 	t_phil			*philos;
 	int				i;
-	unsigned long	time;
 	pthread_mutex_t	**forks;
 
-	time = get_time();
 	(void)time;
 	if (ac < 5 || ac > 6)
 		return (puterr());
@@ -52,10 +54,14 @@ int					main(int ac, char **av)
 	i = -1;
 	while (++i < data.num)
 	{
-		pthread_create(&data.threads[i], NULL, sobaka, (void*)&philos[i]);
-		usleep(100);
+		pthread_create(&data.threads[i], NULL, phillip, (void*)&philos[i]);
+		usleep(300);
 	}
-	// getchar();
+	getchar();
+	i = -1;
+	while (++i < data.num)
+		if (philos[i].died)
+			printf("%d is dead\n", i + 1);
 	i = -1;
 	while (++i < data.num)
 		pthread_mutex_destroy(forks[i]);
@@ -68,5 +74,6 @@ int					main(int ac, char **av)
 	free(forks);
 	free(data.threads);
 	free(philos);
+	getchar();
 	return (0);
 }
