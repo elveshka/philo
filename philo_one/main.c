@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/12 10:35:33 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/12 16:31:31 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 void				*phillip(void *phil)
 {
-	while (((t_phil *)phil)->living_time - ((t_phil *)phil)->start_meal < \
-	((t_phil *)phil)->data->time_to_die)
+	while (((t_phil *)phil)->meal_times)
 	{
-		pthread_mutex_lock(((t_phil *)phil)->left);
-		grabbing_forks((t_phil *)phil);
-		pthread_mutex_lock(((t_phil *)phil)->right);
+		if ((((t_phil *)phil)->living_time - ((t_phil *)phil)->start_meal > \
+		((t_phil *)phil)->data->time_to_die))
+		{
+			((t_phil *)phil)->died++;
+			break ;
+		}
 		grabbing_forks((t_phil *)phil);
 		if (eating((t_phil *)phil))
 		{
@@ -34,9 +36,13 @@ void				*phillip(void *phil)
 			break ;
 		}
 	}
-	printf("%ld %d died\n", \
-	((t_phil *)phil)->living_time - ((t_phil *)phil)->data->start_time, \
-	((t_phil *)phil)->index + 1);
+	if (((t_phil *)phil)->died)
+	{
+		pthread_mutex_lock(((t_phil *)phil)->print);
+		printf("%ld %d died\n", \
+		get_time() - ((t_phil *)phil)->data->start_time, \
+		((t_phil *)phil)->index + 1);
+	}
 	return (NULL);
 }
 
@@ -46,29 +52,26 @@ int					main(int ac, char **av)
 	t_phil			*philos;
 	int				i;
 	pthread_mutex_t	**forks;
+	pthread_mutex_t	*print;
 
-	(void)time;
-	if (ac < 5 || ac > 6)
-		return (puterr());
 	if (philo_config(ac, av, &data))
-		return (1);
+		return (puterr());
 	forks = create_mutex(data.num);
 	data.threads = malloc(sizeof(pthread_t) * data.num);
-	philos = philos_init(&data, forks);
+	print = malloc(sizeof(pthread_mutex_t));
+	philos = philos_init(&data, forks, print);
 	i = -1;
+	data.start_time = get_time();
 	while (++i < data.num)
 	{
 		pthread_create(&data.threads[i], NULL, phillip, (void*)&philos[i]);
-		usleep(300);
+		usleep(150);
 	}
 	getchar();
 	i = -1;
 	while (++i < data.num)
-		if (philos[i].died)
-			printf("%d is dead\n", i + 1);
-	i = -1;
-	while (++i < data.num)
 		pthread_mutex_destroy(forks[i]);
+	pthread_mutex_destroy(print);
 	i = -1;
 	while (++i < data.num)
 		free(forks[i]);
@@ -78,6 +81,5 @@ int					main(int ac, char **av)
 	free(forks);
 	free(data.threads);
 	free(philos);
-	getchar();
 	return (0);
 }

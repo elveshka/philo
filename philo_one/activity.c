@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 18:06:18 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/10 15:53:03 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/12 16:33:49 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 
 int				eating(t_phil *phil)
 {
+	pthread_mutex_lock(phil->print);
 	phil->start_meal = get_time();
 	printf("%ld %d is eating\n",
 	phil->start_meal - phil->data->start_time, phil->index + 1);
+	pthread_mutex_unlock(phil->print);
+	phil->meal_times--;
 	while (get_time() < phil->start_meal + phil->data->time_to_eat)
 	{
 		usleep(100);
@@ -33,8 +36,10 @@ int				sleeping(t_phil *phil)
 	if ((phil->living_time = get_time()) - phil->start_meal > \
 	phil->data->time_to_die)
 		return (1);
+	pthread_mutex_lock(phil->print);
 	printf("%ld %d is sleeping\n",
 	phil->living_time - phil->data->start_time, phil->index + 1);
+	pthread_mutex_unlock(phil->print);
 	while (get_time() < phil->living_time + phil->data->time_to_sleep)
 	{
 		usleep(100);
@@ -53,9 +58,11 @@ int				thinking(t_phil *phil)
 		phil->died++;
 		return (1);
 	}
+	pthread_mutex_lock(phil->print);
 	printf("%ld %d is thinking\n",
 	phil->living_time - phil->data->start_time, phil->index + 1);
-	while (get_time() < phil->start_meal + phil->data->time_to_die)
+	pthread_mutex_unlock(phil->print);
+	while (get_time() < phil->start_meal + phil->data->time_to_die - 1)
 		usleep(100);
 	phil->living_time = get_time();
 	return (0);
@@ -63,6 +70,11 @@ int				thinking(t_phil *phil)
 
 void			grabbing_forks(t_phil *phil)
 {
+	pthread_mutex_lock(((t_phil *)phil)->left);
+	phil->living_time = get_time();
+	printf("%ld %d has taken a fork\n",
+	phil->living_time - phil->data->start_time, phil->index + 1);
+	pthread_mutex_lock(((t_phil *)phil)->right);
 	phil->living_time = get_time();
 	printf("%ld %d has taken a fork\n",
 	phil->living_time - phil->data->start_time, phil->index + 1);

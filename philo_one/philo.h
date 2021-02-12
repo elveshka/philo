@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:24:37 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/10 15:15:58 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/12 11:07:44 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct		s_phil
 	int				meal_times;
 	pthread_mutex_t	*left;
 	pthread_mutex_t	*right;
+	pthread_mutex_t	*print;
 	t_data			*data;
 }					t_phil;
 
@@ -51,7 +52,8 @@ int					sleeping(t_phil *phil);
 int					thinking(t_phil *phil);
 void				grabbing_forks(t_phil *phil);
 long				get_time(void);
-t_phil				*philos_init(t_data *data, pthread_mutex_t **forks);
+t_phil				*philos_init(t_data *data, pthread_mutex_t **forks, \
+					pthread_mutex_t *print);
 int					philo_config(int ac, char **av, t_data *data);
 pthread_mutex_t		**create_mutex(int num);
 
