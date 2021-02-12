@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/10 15:54:14 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/12 10:35:33 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void				*phillip(void *phil)
 {
-	while (!((t_phil *)phil)->died)
+	while (((t_phil *)phil)->living_time - ((t_phil *)phil)->start_meal < \
+	((t_phil *)phil)->data->time_to_die)
 	{
 		pthread_mutex_lock(((t_phil *)phil)->left);
 		grabbing_forks((t_phil *)phil);
