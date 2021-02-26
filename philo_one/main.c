@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/12 16:31:31 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/26 20:09:23 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,16 @@
 
 void				*phillip(void *phil)
 {
+	int		res;
+
 	while (((t_phil *)phil)->meal_times)
 	{
-		if ((((t_phil *)phil)->living_time - ((t_phil *)phil)->start_meal > \
-		((t_phil *)phil)->data->time_to_die))
+		if ((res = eating((t_phil *)phil)))
 		{
-			((t_phil *)phil)->died++;
+			if (res == 1)
+				((t_phil *)phil)->died++;
 			break ;
 		}
-		grabbing_forks((t_phil *)phil);
-		if (eating((t_phil *)phil))
-		{
-			((t_phil *)phil)->died++;
-			break ;
-		}
-		pthread_mutex_unlock(((t_phil *)phil)->right);
-		pthread_mutex_unlock(((t_phil *)phil)->left);
 		if (sleeping((t_phil *)phil) || thinking((t_phil *)phil))
 		{
 			((t_phil *)phil)->died++;
@@ -39,11 +33,41 @@ void				*phillip(void *phil)
 	if (((t_phil *)phil)->died)
 	{
 		pthread_mutex_lock(((t_phil *)phil)->print);
-		printf("%ld %d died\n", \
-		get_time() - ((t_phil *)phil)->data->start_time, \
-		((t_phil *)phil)->index + 1);
+		printf("%ld %d died\n", get_time() - \
+		((t_phil *)phil)->data->start_time, ((t_phil *)phil)->index + 1);
 	}
 	return (NULL);
+}
+
+void				simulation(t_data *data, t_phil *philos)
+{
+	int		i;
+	int		meals;
+
+	i = -1;
+	data->start_time = get_time();
+	while (++i < data->num)
+	{
+		pthread_create(&(data->threads[i]), NULL, phillip, (void*)&(philos[i]));
+		usleep(250);
+	}
+	i = -1;
+	meals = 0;
+	while (++i < data->num)
+	{
+		if ((philos + i)->died)
+			break ;
+		meals += (philos + i)->meal_times;
+		if (i == data->num - 1)
+		{
+			if (meals == 0)
+				break ;
+			else
+				meals = 0;
+			i = -1;
+		}
+	}
+	usleep(500);
 }
 
 int					main(int ac, char **av)
@@ -60,22 +84,13 @@ int					main(int ac, char **av)
 	data.threads = malloc(sizeof(pthread_t) * data.num);
 	print = malloc(sizeof(pthread_mutex_t));
 	philos = philos_init(&data, forks, print);
-	i = -1;
-	data.start_time = get_time();
-	while (++i < data.num)
-	{
-		pthread_create(&data.threads[i], NULL, phillip, (void*)&philos[i]);
-		usleep(150);
-	}
-	getchar();
+	simulation(&data, philos);
 	i = -1;
 	while (++i < data.num)
 		pthread_mutex_destroy(forks[i]);
 	pthread_mutex_destroy(print);
-	i = -1;
-	while (++i < data.num)
+	while (--i >= 0)
 		free(forks[i]);
-	i = -1;
 	while (++i < data.num)
 		pthread_detach(data.threads[i]);
 	free(forks);

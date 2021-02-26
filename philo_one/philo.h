@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:24:37 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/12 11:07:44 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/26 19:57:09 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,12 @@ int					not_strlen(char *s);
 int					eating(t_phil *phil);
 int					sleeping(t_phil *phil);
 int					thinking(t_phil *phil);
-void				grabbing_forks(t_phil *phil);
+int					grabbing_forks(t_phil *phil);
 long				get_time(void);
 t_phil				*philos_init(t_data *data, pthread_mutex_t **forks, \
 					pthread_mutex_t *print);
 int					philo_config(int ac, char **av, t_data *data);
 pthread_mutex_t		**create_mutex(int num);
+void				waste_of_time(int time_to_waste, t_phil *phil);
 
 #endif

@@ -6,27 +6,44 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 18:06:18 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/12 16:33:49 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/02/26 19:59:44 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void			waste_of_time(int time_to_waste, t_phil *phil)
+{
+	long		start;
+
+	start = get_time();
+	while (get_time() - start < time_to_waste)
+	{
+		usleep(10);
+		phil->living_time = get_time();
+		if (phil->living_time - phil->start_meal > phil->data->time_to_die)
+		{
+			phil->died++;
+			return ;
+		}
+	}
+}
+
 int				eating(t_phil *phil)
 {
-	pthread_mutex_lock(phil->print);
+	if (grabbing_forks(phil))
+		return (1);
 	phil->start_meal = get_time();
+	pthread_mutex_lock(phil->print);
 	printf("%ld %d is eating\n",
 	phil->start_meal - phil->data->start_time, phil->index + 1);
 	pthread_mutex_unlock(phil->print);
+	waste_of_time(phil->data->time_to_eat, phil);
+	pthread_mutex_unlock(phil->right);
+	pthread_mutex_unlock(phil->left);
 	phil->meal_times--;
-	while (get_time() < phil->start_meal + phil->data->time_to_eat)
-	{
-		usleep(100);
-		if ((phil->living_time = get_time()) - phil->start_meal > \
-		phil->data->time_to_die)
-			return (1);
-	}
+	if (phil->meal_times == 0)
+		return (2);
 	phil->living_time = get_time();
 	return (0);
 }
@@ -40,13 +57,7 @@ int				sleeping(t_phil *phil)
 	printf("%ld %d is sleeping\n",
 	phil->living_time - phil->data->start_time, phil->index + 1);
 	pthread_mutex_unlock(phil->print);
-	while (get_time() < phil->living_time + phil->data->time_to_sleep)
-	{
-		usleep(100);
-		if (get_time() - phil->start_meal > phil->data->time_to_die)
-			return (1);
-	}
-	phil->living_time = get_time();
+	waste_of_time(phil->data->time_to_sleep, phil);
 	return (0);
 }
 
@@ -54,30 +65,30 @@ int				thinking(t_phil *phil)
 {
 	if ((phil->living_time = get_time()) - phil->start_meal > \
 	phil->data->time_to_die)
-	{
-		phil->died++;
 		return (1);
-	}
 	pthread_mutex_lock(phil->print);
 	printf("%ld %d is thinking\n",
 	phil->living_time - phil->data->start_time, phil->index + 1);
 	pthread_mutex_unlock(phil->print);
-	while (get_time() < phil->start_meal + phil->data->time_to_die - 1)
-		usleep(100);
-	phil->living_time = get_time();
 	return (0);
 }
 
-void			grabbing_forks(t_phil *phil)
+int				grabbing_forks(t_phil *phil)
 {
-	pthread_mutex_lock(((t_phil *)phil)->left);
+	pthread_mutex_lock(phil->left);
+	if (((phil->living_time = get_time()) - phil->start_meal > \
+	phil->data->time_to_die) && phil->start_meal != 0)
+		return (1);
+	printf("%ld %d has taken a fork\n",
+	phil->living_time - phil->data->start_time, phil->index + 1);
+	pthread_mutex_lock(phil->right);
+	if (((phil->living_time = get_time()) - phil->start_meal > \
+	phil->data->time_to_die) && phil->start_meal != 0)
+		return (1);
 	phil->living_time = get_time();
 	printf("%ld %d has taken a fork\n",
 	phil->living_time - phil->data->start_time, phil->index + 1);
-	pthread_mutex_lock(((t_phil *)phil)->right);
-	phil->living_time = get_time();
-	printf("%ld %d has taken a fork\n",
-	phil->living_time - phil->data->start_time, phil->index + 1);
+	return (0);
 }
 
 long			get_time(void)
