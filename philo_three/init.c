@@ -6,13 +6,13 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 18:51:49 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/02 16:14:36 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/04 13:25:59 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-t_phil				*philos_init(t_data *data, sem_t **forks, sem_t *print)
+t_phil				*philos_init(t_data *data, sem_t *forks, sem_t *print)
 {
 	t_phil		*philos;
 	int			i;
@@ -21,12 +21,15 @@ t_phil				*philos_init(t_data *data, sem_t **forks, sem_t *print)
 	philos = malloc(sizeof(t_phil) * data->num);
 	while (++i < data->num)
 	{
-		philos.died = 0;
-		philos.living_time = data->time_to_die - 1;
-		philos.start_meal = 0;
-		philos.meal_times = data->num_eat != -1 ? data->num_eat : -1;
-		philos.forks = *forks;
-		philos.print = print;
+		philos[i].index = i;
+		philos[i].ok = 0;
+		philos[i].data = data;
+		philos[i].died = 0;
+		philos[i].living_time = data->time_to_die - 1;
+		philos[i].start_meal = 0;
+		philos[i].meal_times = data->num_eat != -1 ? data->num_eat : -1;
+		philos[i].forks = forks;
+		philos[i].print = print;
 	}
 	return (philos);
 }
