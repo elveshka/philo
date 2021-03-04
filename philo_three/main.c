@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/04 14:32:56 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/04 15:13:48 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int			phillip2(t_phil *phil)
 	return (res);
 }
 
-void				*phillip(void *phil)
+static void			*phillip(void *phil)
 {
 	int		res;
 	pid_t	pid;

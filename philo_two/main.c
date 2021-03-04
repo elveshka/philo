@@ -6,13 +6,13 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/02 15:52:42 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/04 15:20:11 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void				*phillip(void *phil)
+static void			*phillip(void *phil)
 {
 	int		res;
 
@@ -39,12 +39,10 @@ void				*phillip(void *phil)
 	return (NULL);
 }
 
-void				simulation(t_data *data, t_phil *philos)
+static void			simulation(t_data *data, t_phil *philos, int i)
 {
-	int		i;
 	int		meals;
 
-	i = -1;
 	data->start_time = get_time();
 	while (++i < data->num)
 	{
@@ -86,8 +84,8 @@ int					main(int ac, char **av)
 	sem_unlink("/print");
 	sem_unlink("/forks");
 	philos = philos_init(&data, &forks, print);
-	simulation(&data, philos);
 	i = -1;
+	simulation(&data, philos, i);
 	while (++i < data.num)
 		pthread_detach(data.threads[i]);
 	free(data.threads);

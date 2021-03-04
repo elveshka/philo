@@ -6,13 +6,13 @@
 #    By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/06 10:47:13 by esnowbal          #+#    #+#              #
-#    Updated: 2021/03/02 15:53:05 by esnowbal         ###   ########.fr        #
+#    Updated: 2021/03/04 15:19:01 by esnowbal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= philo_two
 
-SRC= notlibft.c activity.c init.c main.c
+SRC= notlibft.c activity.c init.c get_time.c main.c
 
 HEADERS= philo.h
 

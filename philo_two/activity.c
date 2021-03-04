@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 18:06:18 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/02 15:51:59 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/04 15:17:51 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,4 @@ int				grabbing_forks(t_phil *phil)
 	phil->living_time - phil->data->start_time, phil->index + 1);
 	sem_post(phil->print);
 	return (0);
-}
-
-long			get_time(void)
-{
-	struct timeval time;
-
-	gettimeofday(&time, NULL);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
