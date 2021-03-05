@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/04 15:13:48 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/05 18:56:30 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,17 @@ static void			*phillip(void *phil)
 	int		res;
 	pid_t	pid;
 
-	pid = fork();
-	if (!pid)
-		exit(phillip2((t_phil*)phil));
-	waitpid(pid, &res, 0);
-	if (res == 256)
-		((t_phil*)phil)->died++;
-	if (res == 512)
-		((t_phil*)phil)->meal_times = 0;
+	if (((t_phil*)phil)->meal_times)
+	{
+		pid = fork();
+		if (!pid)
+			exit(phillip2((t_phil*)phil));
+		waitpid(pid, &res, 0);
+		if (res == 256)
+			((t_phil*)phil)->died++;
+		if (res == 512)
+			((t_phil*)phil)->meal_times = 0;
+	}
 	return (NULL);
 }
 
