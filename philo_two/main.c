@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/04 15:20:11 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/07 16:51:42 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,7 @@ static void			simulation(t_data *data, t_phil *philos, int i)
 
 	data->start_time = get_time();
 	while (++i < data->num)
-	{
 		pthread_create(&(data->threads[i]), NULL, phillip, (void*)&(philos[i]));
-		usleep(250);
-	}
 	i = -1;
 	meals = 0;
 	while (++i < data->num)
@@ -88,6 +85,7 @@ int					main(int ac, char **av)
 	simulation(&data, philos, i);
 	while (++i < data.num)
 		pthread_detach(data.threads[i]);
+	sem_close(philos[0].waiter);
 	free(data.threads);
 	free(philos);
 	sem_close(forks);

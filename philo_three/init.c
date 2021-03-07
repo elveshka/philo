@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 18:51:49 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/04 13:25:59 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/07 18:04:40 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ int					philo_config(int ac, char **av, t_data *data)
 		while (av[i][j])
 		{
 			if (!not_isdigit(av[i][j]))
-				return (puterr());
+				return (1);
 			j++;
 		}
 	}
 	data->num = not_atoi(av[1]);
 	if (data->num < 2)
-		return (puterr());
+		return (1);
 	data->time_to_die = not_atoi(av[2]);
 	data->time_to_eat = not_atoi(av[3]);
 	data->time_to_sleep = not_atoi(av[4]);

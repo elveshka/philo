@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:24:37 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/02 15:53:02 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/07 16:48:18 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct		s_phil
 	t_data			*data;
 	sem_t			*forks;
 	sem_t			*print;
+	sem_t			*waiter;
 }					t_phil;
 
 int					not_atoi(const char *str);

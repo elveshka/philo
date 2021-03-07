@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 18:51:49 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/02 15:52:05 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/07 16:55:54 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,12 @@ t_phil				*philos_init(t_data *data, sem_t **forks, sem_t *print)
 {
 	t_phil		*philos;
 	int			i;
+	sem_t		*waiter;
 
 	i = -1;
 	philos = malloc(sizeof(t_phil) * data->num);
+	waiter = sem_open("/waiter", O_CREAT | O_EXCL, S_IRWXU, 1);
+	sem_unlink("/waiter");
 	while (++i < data->num)
 	{
 		philos[i].index = i;
@@ -29,6 +32,7 @@ t_phil				*philos_init(t_data *data, sem_t **forks, sem_t *print)
 		philos[i].meal_times = data->num_eat != -1 ? data->num_eat : -1;
 		philos[i].forks = *forks;
 		philos[i].print = print;
+		philos[i].waiter = waiter;
 	}
 	return (philos);
 }
@@ -47,13 +51,13 @@ int					philo_config(int ac, char **av, t_data *data)
 		while (av[i][j])
 		{
 			if (!not_isdigit(av[i][j]))
-				return (puterr());
+				return (1);
 			j++;
 		}
 	}
 	data->num = not_atoi(av[1]);
 	if (data->num < 2)
-		return (puterr());
+		return (1);
 	data->time_to_die = not_atoi(av[2]);
 	data->time_to_eat = not_atoi(av[3]);
 	data->time_to_sleep = not_atoi(av[4]);

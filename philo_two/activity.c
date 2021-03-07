@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/30 18:06:18 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/04 15:17:51 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/07 16:49:31 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int				thinking(t_phil *phil)
 
 int				grabbing_forks(t_phil *phil)
 {
+	sem_wait(phil->waiter);
 	sem_wait(phil->forks);
 	if (((phil->living_time = get_time()) - phil->start_meal > \
 	phil->data->time_to_die) && phil->start_meal != 0)
@@ -92,5 +93,6 @@ int				grabbing_forks(t_phil *phil)
 	printf("%ld %d has taken a fork\n",
 	phil->living_time - phil->data->start_time, phil->index + 1);
 	sem_post(phil->print);
+	sem_post(phil->waiter);
 	return (0);
 }
