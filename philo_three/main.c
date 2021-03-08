@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/05 18:56:30 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/07 18:20:45 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,7 @@ static void			simulation(t_data *data, t_phil *philos, int i)
 
 	data->start_time = get_time();
 	while (++i < data->num)
-	{
 		pthread_create(&(data->threads[i]), NULL, phillip, (void*)&(philos[i]));
-		usleep(250);
-	}
 	i = -1;
 	meals = 0;
 	while (++i < data->num)

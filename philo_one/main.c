@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:10:52 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/04 15:35:41 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/08 12:23:34 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ static void			*phillip(void *phil)
 	if (((t_phil *)phil)->died)
 	{
 		pthread_mutex_lock(((t_phil *)phil)->print);
-		printf("%ld %d died\n", get_time() - \
-		((t_phil *)phil)->data->start_time, ((t_phil *)phil)->index + 1);
+		if (get_time() - ((t_phil *)phil)->data->start_time < 1000000000)
+			printf("%ld %d died\n", get_time() - \
+			((t_phil *)phil)->data->start_time, ((t_phil *)phil)->index + 1);
 	}
 	return (NULL);
 }
@@ -49,23 +50,23 @@ static void			simulation(t_data *data, t_phil *philos, int i)
 		pthread_create(&(data->threads[i]), NULL, phillip, (void*)&(philos[i]));
 		usleep(250);
 	}
-	i = -1;
 	meals = 0;
-	while (++i < data->num)
+	while (--i >= 0)
 	{
 		if ((philos + i)->died)
 			break ;
 		meals += (philos + i)->meal_times;
-		if (i == data->num - 1)
+		if (i == 0)
 		{
 			if (meals == 0)
 				break ;
 			else
 				meals = 0;
-			i = -1;
+			i = data->num;
 		}
 	}
-	usleep(500);
+	if ((philos + i)->died)
+		pthread_join(data->threads[i], NULL);
 }
 
 int					main(int ac, char **av)
@@ -74,25 +75,24 @@ int					main(int ac, char **av)
 	t_phil			*philos;
 	int				i;
 	pthread_mutex_t	**forks;
-	pthread_mutex_t	*print;
+	pthread_mutex_t	print;
 
 	if (philo_config(ac, av, &data))
 		return (puterr());
 	forks = create_mutex(data.num);
 	data.threads = malloc(sizeof(pthread_t) * data.num);
-	print = malloc(sizeof(pthread_mutex_t));
-	philos = philos_init(&data, forks, print);
+	philos = philos_init(&data, forks, &print);
 	i = -1;
 	simulation(&data, philos, i);
 	while (++i < data.num)
-		pthread_mutex_destroy(forks[i]);
-	pthread_mutex_destroy(print);
-	while (--i >= 0)
-		free(forks[i]);
-	while (++i < data.num)
 		pthread_detach(data.threads[i]);
+	while (--i >= 0)
+		pthread_mutex_destroy(forks[i]);
+	while (++i < data.num)
+		free(forks[i]);
 	free(forks);
 	free(data.threads);
 	free(philos);
+	pthread_mutex_destroy(&print);
 	return (0);
 }
