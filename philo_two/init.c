@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 18:51:49 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/07 16:55:54 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/13 16:50:28 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,12 @@ t_phil				*philos_init(t_data *data, sem_t **forks, sem_t *print)
 
 	i = -1;
 	philos = malloc(sizeof(t_phil) * data->num);
-	waiter = sem_open("/waiter", O_CREAT | O_EXCL, S_IRWXU, 1);
 	sem_unlink("/waiter");
+	waiter = sem_open("/waiter", O_CREAT | O_EXCL, S_IRWXU, 1);
 	while (++i < data->num)
 	{
 		philos[i].index = i;
 		philos[i].data = data;
-		philos[i].died = 0;
-		philos[i].living_time = philos[i].data->time_to_die - 1;
 		philos[i].start_meal = 0;
 		philos[i].meal_times = data->num_eat != -1 ? data->num_eat : -1;
 		philos[i].forks = *forks;

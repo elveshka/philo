@@ -6,7 +6,7 @@
 #    By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/06 10:47:13 by esnowbal          #+#    #+#              #
-#    Updated: 2021/03/04 15:19:01 by esnowbal         ###   ########.fr        #
+#    Updated: 2021/03/13 14:58:07 by esnowbal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ HEADERS= philo.h
 all: $(NAME)
 
 $(NAME): $(SRC) $(HEADERS)
-		gcc -Wall -Wextra -Werror -pthread $(SRC) -o $(NAME)
+		clang -Wall -Wextra -Werror -pthread $(SRC) -o $(NAME)
 
 clean:
 		rm -rf $(NAME)

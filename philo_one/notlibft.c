@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/29 14:34:11 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/02/01 21:13:57 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/11 13:43:50 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,19 @@ int			puterr(void)
 {
 	printf("Invalid argument\n");
 	return (1);
+}
+
+void		*not_calloc(size_t count, size_t cell_size)
+{
+	void	*res;
+
+	if (cell_size != 0)
+		if (((count * cell_size) / cell_size) != count)
+			return (NULL);
+	if (count * cell_size == 0)
+		return (malloc(0));
+	if (!(res = malloc(cell_size * count)))
+		return (NULL);
+	memset(res, 0, count * cell_size);
+	return (res);
 }

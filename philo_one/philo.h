@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/28 16:24:37 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/08 11:32:46 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/13 16:19:46 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <pthread.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <string.h>
 
 typedef struct		s_data
 {
@@ -33,9 +34,7 @@ typedef struct		s_data
 typedef struct		s_phil
 {
 	int				index;
-	long			living_time;
 	long			start_meal;
-	int				died;
 	int				meal_times;
 	pthread_mutex_t	*left;
 	pthread_mutex_t	*right;
@@ -48,14 +47,15 @@ int					not_isdigit(int c);
 int					puterr(void);
 int					not_strlen(char *s);
 int					eating(t_phil *phil);
-int					sleeping(t_phil *phil);
-int					thinking(t_phil *phil);
-int					grabbing_forks(t_phil *phil);
+void				sleeping(t_phil *phil);
+void				thinking(t_phil *phil);
+void				grabbing_forks(t_phil *phil);
 long				get_time(void);
-t_phil				*philos_init(t_data *data, pthread_mutex_t **forks, \
+t_phil				*philos_init(t_data *data, pthread_mutex_t *forks, \
 					pthread_mutex_t *print);
 int					philo_config(int ac, char **av, t_data *data);
-pthread_mutex_t		**create_mutex(int num);
-void				waste_of_time(int time_to_waste, t_phil *phil);
+pthread_mutex_t		*create_mutex(int num);
+void				waste_of_time(int time_to_waste);
+void				*not_calloc(size_t count, size_t cell_size);
 
 #endif

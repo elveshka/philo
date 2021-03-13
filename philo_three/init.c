@@ -6,7 +6,7 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 18:51:49 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/07 18:04:40 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/13 18:39:46 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,21 @@ t_phil				*philos_init(t_data *data, sem_t *forks, sem_t *print)
 {
 	t_phil		*philos;
 	int			i;
+	sem_t		*waiter;
 
 	i = -1;
 	philos = malloc(sizeof(t_phil) * data->num);
+	sem_unlink("/waiter");
+	waiter = sem_open("/waiter", O_CREAT | O_EXCL, S_IRWXU, 1);
 	while (++i < data->num)
 	{
 		philos[i].index = i;
-		philos[i].ok = 0;
 		philos[i].data = data;
-		philos[i].died = 0;
-		philos[i].living_time = data->time_to_die - 1;
 		philos[i].start_meal = 0;
 		philos[i].meal_times = data->num_eat != -1 ? data->num_eat : -1;
 		philos[i].forks = forks;
 		philos[i].print = print;
+		philos[i].waiter = waiter;
 	}
 	return (philos);
 }
@@ -59,5 +60,6 @@ int					philo_config(int ac, char **av, t_data *data)
 	data->time_to_eat = not_atoi(av[3]);
 	data->time_to_sleep = not_atoi(av[4]);
 	data->num_eat = (ac == 6) ? not_atoi(av[5]) : -1;
+	data->dead = 0;
 	return (0);
 }

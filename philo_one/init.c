@@ -6,13 +6,13 @@
 /*   By: esnowbal <esnowbal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/02 18:51:49 by esnowbal          #+#    #+#             */
-/*   Updated: 2021/03/07 18:02:57 by esnowbal         ###   ########.fr       */
+/*   Updated: 2021/03/13 16:19:51 by esnowbal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-t_phil				*philos_init(t_data *data, pthread_mutex_t **forks, \
+t_phil				*philos_init(t_data *data, pthread_mutex_t *forks, \
 								pthread_mutex_t *print)
 {
 	t_phil		*philos;
@@ -25,12 +25,9 @@ t_phil				*philos_init(t_data *data, pthread_mutex_t **forks, \
 	{
 		philos[i].index = i;
 		philos[i].data = data;
-		philos[i].died = 0;
-		philos[i].living_time = philos[i].data->time_to_die - 1;
-		philos[i].start_meal = 0;
 		philos[i].meal_times = data->num_eat != -1 ? data->num_eat : -1;
-		philos[i].left = forks[i];
-		philos[i].right = forks[(i + 1) % data->num];
+		philos[i].left = &forks[i];
+		philos[i].right = &forks[(i + 1) % data->num];
 		philos[i].print = print;
 	}
 	return (philos);
@@ -64,18 +61,16 @@ int					philo_config(int ac, char **av, t_data *data)
 	return (0);
 }
 
-pthread_mutex_t		**create_mutex(int num)
+pthread_mutex_t		*create_mutex(int num)
 {
 	int				i;
-	pthread_mutex_t	**ret;
+	pthread_mutex_t	*ret;
 
 	i = -1;
-	ret = (pthread_mutex_t **)malloc(sizeof(pthread_mutex_t *) * (num + 1));
-	while (++i < num)
-		ret[i] = malloc(sizeof(pthread_mutex_t));
-	ret[i] = 0;
+	if (!(ret = not_calloc(num + 1, sizeof(pthread_mutex_t))))
+		return (NULL);
 	i = -1;
 	while (++i < num)
-		pthread_mutex_init(ret[i], NULL);
+		pthread_mutex_init(&ret[i], NULL);
 	return (ret);
 }
